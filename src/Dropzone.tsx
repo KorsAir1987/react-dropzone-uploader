@@ -482,6 +482,13 @@ class Dropzone extends React.Component<IDropzoneProps, { active: boolean; dragge
       if (isVideo) {
         const video = document.createElement('video')
         video.src = objectUrl
+        video.load()
+        const canvas = document.createElement('canvas')
+        let context = canvas.getContext('2d')
+        if(context !== null) {
+          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+          fileWithMeta.meta.previewUrl = canvas.toDataURL()
+        }
         await fileCallbackToPromise(video)
         fileWithMeta.meta.duration = video.duration
         fileWithMeta.meta.videoWidth = video.videoWidth
